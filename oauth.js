@@ -36,11 +36,11 @@ export default {
 		var nonce = index_js.generateRandomNonce();
 		authorizationUrl.searchParams.set('nonce', nonce);
 
-		storeValue("oauth_nonce", nonce);
-		storeValue("oath_code_verifier", code_verifier);
+		//storeValue("oauth_nonce", nonce);
+		//storeValue("oath_code_verifier", code_verifier);
 
 		console.info("AuthorizationURL: " + authorizationUrl.toString());
-		Auth_URL.setText(authorizationUrl.toString());
+		//Auth_URL.setText(authorizationUrl.toString());
 		return authorizationUrl.toString();
 	},
 
@@ -83,8 +83,8 @@ export default {
 		console.log('Access Token Response', result);
 
 		// Clear storage to get rid of all leftovers and store token
-		clearStore();
-		storeValue("token", result);
+		//clearStore();
+		//storeValue("token", result);
 	},
 
 	async refreshAccessToken() {
@@ -115,7 +115,7 @@ export default {
 		//
 		// There is no need to clear storage in token refresh
 		//
-		storeValue("token", result);
+		//storeValue("token", result);
 	},
 
 }
