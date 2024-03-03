@@ -1,12 +1,13 @@
 
-let oauthMinimumAccessTokenLifetimeInmS = 10 * 1000;
-let oauthServerMaxResponseTimeInmS = 10 * 1000;
+ let oauthMinimumAccessTokenLifetimeInmS = 10 * 1000;
+ let oauthServerMaxResponseTimeInmS = 10 * 1000;
 
-function init() {
+
+async function init() {
 	this.setUpRefreshTimers();
 }
 
-function setUpRefreshTimers() {
+ function setUpRefreshTimers() {
 	const refreshTokenCallback = () => {
 		if(!appsmith.store.token) {
 			clearInterval('OAuthRefreshTimer');
@@ -27,12 +28,15 @@ function setUpRefreshTimers() {
 		clearInterval("OAuthRefreshCheckTimer");
 		setInterval(refreshTokenCallback, period, "OAuthRefreshTimer");
 	};
+	clearInterval("OAuthRefreshCheckTimer");
+	clearInterval('OAuthRefreshTimer');
 
 	// Lets refresh token to get maximum lifetime possible before conter starts.
 	refreshTokenCallback();
+	setInterval(refreshTokenCheckCallback, this.oauthMinimumAccessTokenLifetimeInmS, "OAuthRefreshCheckTimer");
 }
 
-function computeAccessTokenRefreshPeriod(expires_in) {
+ function computeAccessTokenRefreshPeriod(expires_in) {
 	if(!expires_in) {
 		expires_in = this.oauthMinimumAccessTokenLifetimeInmS / 1000;
 	}
@@ -40,9 +44,11 @@ function computeAccessTokenRefreshPeriod(expires_in) {
 	return Math.max((expires_in * 1000 - this.oauthServerMaxResponseTimeInmS),										this.oauthMinimumAccessTokenLifetimeInmS);
 }
 
+
 const OAuth2 = {
-	init,
-	setUpRefreshTimers,
 	computeAccessTokenRefreshPeriod,
+	setUpRefreshTimers,
+	init,
 }
 
+export default OAuth2;
